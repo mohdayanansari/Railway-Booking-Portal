@@ -16,11 +16,16 @@ function Main() {
 
   async function bookSeat(e) {
     e.preventDefault()
+
     if (input.length === 0) {
       alert("Enter Number of seats")
       return
     }
     if (input.length === 0 && parseInt(input) < 0) return
+    if (parseInt(input) > 7) {
+      alert("You can Only reserve 7 seats at once")
+      return
+    }
     try {
       let { data } = await axios.get(booking_api, {
         params: {
