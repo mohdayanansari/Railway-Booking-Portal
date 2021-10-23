@@ -39,6 +39,7 @@ function Main() {
       setLoading1(false)
       fetchSeats()
     } catch (err) {
+      setLoading1(false)
       console.log(err)
     }
   }
@@ -50,6 +51,7 @@ function Main() {
       console.log(data)
       setLoading2(false)
     } catch (err) {
+      setLoading1(false)
       console.log(err)
     }
   }
