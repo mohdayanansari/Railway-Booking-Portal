@@ -1,17 +1,22 @@
 .my_navbar {
     min-height: 60px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
 }
 .main_container {
-    position: absolute;
+    position: relative;
     width: 100%;
-    min-height: calc(100vh - 60px);
+    padding: 150px;
+    min-height: 100vh;
     background-image: url(./assets/bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 .my-card {
     /* background: rgba(255, 255, 255, 0.15); */
@@ -19,7 +24,7 @@
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(6.5px);
     -webkit-backdrop-filter: blur(6.5px);
-    position: absolute;
+    position: relative;
     width: min(700px, 100%);
 }
 
@@ -28,5 +33,6 @@
     background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(6.5px);
+    position: relative;
     -webkit-backdrop-filter: blur(6.5px);
 }
