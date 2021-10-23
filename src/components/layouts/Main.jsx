@@ -8,7 +8,7 @@ import { booking_api, _availableSeats } from "../../apis";
 
 
 function Loading({ loading }) {
-  return loading ? <div>Loading</div> : ""
+  return loading ? <div>Loading...</div> : ""
 }
 
 function Main() {
