@@ -6,8 +6,15 @@ import Button from "../Button";
 import axios from "axios"
 import { booking_api, _availableSeats } from "../../apis";
 
+
+function Loading({ loading }) {
+  return loading ? <div>Loading</div> : ""
+}
+
 function Main() {
   const [input, setInput] = useState("")
+  const [loading1, setLoading1] = useState(false)
+  const [loading2, setLoading2] = useState(false)
   const [availableSeats, setAvailableSeats] = useState([])
   const [seat_numbers, setSeatNumbers] = useState([])
   useEffect(() => {
@@ -16,24 +23,20 @@ function Main() {
 
   async function bookSeat(e) {
     e.preventDefault()
-
     if (input.length === 0) {
       alert("Enter Number of seats")
       return
     }
     if (input.length === 0 && parseInt(input) < 0) return
-    if (parseInt(input) > 7) {
-      alert("You can Only reserve 7 seats at once")
-      return
-    }
     try {
+      setLoading1(true)
       let { data } = await axios.get(booking_api, {
         params: {
           seats: input
         }
       })
       setSeatNumbers(data)
-      console.log(data)
+      setLoading1(false)
       fetchSeats()
     } catch (err) {
       console.log(err)
@@ -41,10 +44,11 @@ function Main() {
   }
   async function fetchSeats() {
     try {
+      setLoading2(true)
       let { data } = await axios.get(_availableSeats)
       setAvailableSeats(data)
       console.log(data)
-
+      setLoading2(false)
     } catch (err) {
       console.log(err)
     }
@@ -70,36 +74,41 @@ function Main() {
             <Button btnName="Book Now" type="submit" />
           </div>
         </form>
-        {
-          seat_numbers.length > 0 ? (
-            <div className="ticketdisplay flex flex-col border border-grey mt-4 rounded-md p-5 shadow">
-              <div className="ticket_header relative flex gap-2 mb-2 items-center font-semibold">
-                <TicketIcon className="z-10 w-8 h-8 text-black text-opacity-30 top-3 left-3" />
-                <div className="">Booked Tickets</div>
-              </div>
-              <div className="ticket_number flex gap-2">
-                {seat_numbers.map((ticket, i) => <div key={i} className="bg-green-500 border border-green-600 w-6 h-6 rounded flex justify-center items-center text-green-900 font-bold">{ticket}</div>)}
-              </div>
+        {loading1 || seat_numbers.length > 0 ? (
+          <div className="ticketdisplay flex flex-col border border-grey mt-4 rounded-md p-5 shadow">
+            <div className="ticket_header relative flex gap-2 mb-2 items-center font-semibold">
+              <TicketIcon className="z-10 w-8 h-8 text-black text-opacity-30 top-3 left-3" />
+              <div className="">Booked Tickets</div>
             </div>
-          ) : ""
-        }
-        {
-          availableSeats.length > 0 ? (
-            <div className="ticketdisplay flex flex-col border border-grey mt-4 rounded-md p-5 shadow">
-              <div className="ticket_header relative flex gap-2 mb-2 items-center font-semibold">
-                <TicketIcon className="z-10 w-8 h-8 text-black text-opacity-30 top-3 left-3" />
-                <div className="">Available Seats</div>
-              </div>
-              <div className="ticket_number flex flex-col gap-2">
-                {availableSeats.map((row, i) => (
-                  <div className="row flex gap-2" key={i}>
-                    {new Array(row.total).fill(0).map((e, j) => <div key={i} className={`border ${j < row.filled ? "bg-red-500 border-red-600" : "bg-green-500 border-green-600"}  w-6 h-6 rounded flex justify-center items-center text-green-900 font-bold`} >{7 * i + j + 1}</div>)}
-                  </div>
-                ))}
-              </div>
+            {
+              seat_numbers.length > 0 ? (
+                <div className="ticket_number flex gap-2">
+                  {seat_numbers.map((ticket, i) => <div key={i} className="bg-green-500 border border-green-600 w-6 h-6 rounded flex justify-center items-center text-green-900 font-bold">{ticket}</div>)}
+                </div>
+              ) : <Loading loading={loading1} />
+            }
+          </div>
+        ) : ""}
+        {/* //available seats  */}
+        {loading2 || availableSeats.length > 0 ? (
+          <div className="ticketdisplay flex flex-col border border-grey mt-4 rounded-md p-5 shadow">
+            <div className="ticket_header relative flex gap-2 mb-2 items-center font-semibold">
+              <TicketIcon className="z-10 w-8 h-8 text-black text-opacity-30 top-3 left-3" />
+              <div className="">Available Tickets</div>
             </div>
-          ) : ""
-        }
+            {
+              availableSeats.length > 0 ? (
+                <div className="ticket_number flex flex-col gap-2">
+                  {availableSeats.map((row, i) => (
+                    <div className="row flex gap-2" key={i}>
+                      {new Array(row.total).fill(0).map((e, j) => <div key={i} className={`border ${j < row.filled ? "bg-red-500 border-red-600" : "bg-green-500 border-green-600"}  w-6 h-6 rounded flex justify-center items-center text-green-900 font-bold`} >{7 * i + j + 1}</div>)}
+                    </div>
+                  ))}
+                </div>
+              ) : <Loading loading={loading2} />
+            }
+          </div>)
+          : ""}
       </div>
     </div>
   );
