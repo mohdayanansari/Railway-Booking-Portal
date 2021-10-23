@@ -36,3 +36,8 @@
     position: relative;
     -webkit-backdrop-filter: blur(6.5px);
 }
+
+img{
+    width: 30px;
+    height: 30px;
+}

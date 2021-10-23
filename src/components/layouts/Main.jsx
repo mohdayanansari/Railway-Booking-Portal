@@ -6,9 +6,10 @@ import Button from "../Button";
 import axios from "axios"
 import { booking_api, _availableSeats } from "../../apis";
 
+import spin from "../../assets/loading.gif"
 
 function Loading({ loading }) {
-  return loading ? <div>Loading...</div> : ""
+  return loading ? <img src={spin}></img> : ""
 }
 
 function Main() {
